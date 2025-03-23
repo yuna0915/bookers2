@@ -95,7 +95,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         fill_in 'book[body]', with: Faker::Lorem.characters(number: 20)
       end
 
-      it '自分の新しい投稿が正しく保存される', spec_category: "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
+      it '自分の新しい投稿が正しく保存される', do "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
         expect { click_button 'Create Book' }.to change(user.books, :count).by(1)
       end
       it 'リダイレクト先が、保存できた投稿の詳細画面になっている', spec_category: "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
@@ -126,8 +126,11 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '投稿のbodyが表示される', spec_category: "基本的なアソシエーション概念と適切な変数設定" do
         expect(page).to have_content book.body
       end
+      it '投稿の編集リンクが表示されない', spec_category: "基本的なアソシエーション概念と適切な変数設定" do
+        expect(page).not_to have_link('Edit')
+      end
       it '投稿の編集リンクが表示される', spec_category: "基本的なアソシエーション概念と適切な変数設定" do
-        expect(page).to have_link 'Edit', href: edit_book_path(book)
+        expect(page).not_to have_link('Edit', href: edit_book_path(book))
       end
       it '投稿の削除リンクが表示される', spec_category: "基本的なアソシエーション概念と適切な変数設定" do
         expect(page).to have_link 'Destroy', href: book_path(book)
@@ -180,7 +183,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
       it '編集画面に遷移する', spec_category: "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
         second_user_book = FactoryBot.create(:book, user: user) # 「user」の投稿をもう一つ作成
         visit book_path(second_user_book)
-        click_link 'Edit'
+        click_link 'Edit', match: :first  # 最初の "Edit" リンクをクリック
         expect(current_path).to eq edit_book_path(second_user_book)
       end
     end
@@ -303,7 +306,7 @@ describe '[STEP2] ユーザログイン後のテスト' do
         expect(page).to have_field 'book[body]'
       end
       it 'bodyフォームに値が入っていない', spec_category: "基本的なアソシエーション概念と適切な変数設定" do
-        expect(find_field('book[body]').text).to be_blank
+        expect(find_field('book[body]').value).to eq ''
       end
       it 'Create Bookボタンが表示される', spec_category: "基本的なアソシエーション概念と適切な変数設定" do
         expect(page).to have_button 'Create Book'

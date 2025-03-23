@@ -20,11 +20,9 @@ class UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     if @user.nil?
       flash[:alert] = "User not found."
-      redirect_to users_path
+      redirect_to user_path
     end
   end
-
-  protected
 
   def update
     @user = User.find_by(id: params[:id])

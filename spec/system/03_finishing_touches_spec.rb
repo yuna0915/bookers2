@@ -42,7 +42,7 @@ describe '[STEP3] 仕上げのテスト' do
       click_button 'Log in'
       visit edit_user_path(user)
       click_button 'Update User'
-      is_expected.to have_content 'successfully'
+      is_expected.to have_content 'You have updated user successfully.'
     end
     it '投稿データの新規投稿成功時: 投稿一覧画面から行います。', spec_category: "バリデーションとメッセージ表示" do
       visit new_user_session_path
@@ -70,10 +70,10 @@ describe '[STEP3] 仕上げのテスト' do
     context 'ユーザ新規登録失敗: nameを1文字にする' do
       before do
         visit new_user_registration_path
-        @name = Faker::Lorem.characters(number: 1)
-        @email = 'a' + user.email # 確実にuser, other_userと違う文字列にするため
+        @name = 'A'  # 1文字の名前を指定
+        @email = 'a@example.com'  # 別の適切な email を指定
         fill_in 'user[name]', with: @name
-        fill_in 'user[email]', with: @email
+        fill_in 'user[email]', with: email
         fill_in 'user[password]', with: 'password'
         fill_in 'user[password_confirmation]', with: 'password'
       end
