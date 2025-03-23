@@ -1,11 +1,13 @@
 class BooksController < ApplicationController
-  before_action :ensure_correct_book, only: [:update,:edit,:destroy]
+  before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_correct_book, only: [:update, :edit, :destroy]
 
   def index
+    @book = Book.new 
+    @books = Book.all
   end
 
   def show
-    @book = Book.find(params[:id])
     @user = @book.user
     @newbook = Book.new
   end
@@ -14,7 +16,7 @@ class BooksController < ApplicationController
     @book = Book.new(book_params)
     @book.user_id = current_user.id
     if @book.save
-      redirect_to book_path(@book), notice: "You have created book successfully."
+      redirect_to @book, notice: "You have created book successfully."
     else
       @books = Book.all
       render "index"
@@ -22,11 +24,9 @@ class BooksController < ApplicationController
   end
 
   def edit
-    @book = Book.find(params[:id])
   end
 
   def update
-    @book = Book.find(params[:id])
     if @book.update(book_params)
       redirect_to book_path(@book), notice: "You have updated book successfully."
     else
@@ -35,13 +35,24 @@ class BooksController < ApplicationController
   end
 
   def destroy
-    @book = Book.find(params[:id])
     @book.destroy
-    redirect_to books_path
+    redirect_to books_path, notice: "You have deleted the book successfully."
   end
 
   private
+
   def book_params
     params.require(:book).permit(:title, :body)
+  end
+
+  def set_book
+    @book = Book.find(params[:id])
+  end
+
+  def ensure_correct_book
+    if @book.user != current_user
+      flash[:alert] = "権限がありません。"
+      redirect_to books_path
+    end
   end
 end

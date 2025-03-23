@@ -1,17 +1,22 @@
-<h2>User info</h2>
-	    <table class='table'>
-	      <tr>
-	        <%= image_tag user.get_profile_image(100,100) %> 
-	      </tr>
-	      <tr>
-	        <th>name</th>
-	        <th><%= current_user.name %></th>
-	      </tr>
-	      <tr>
-	        <th>introduction</th>
-	        <th><%= current_user.introduction %></th>
-	      </tr>
-	    </table>
-	    <div class='row'>
-        <%= link_to "Edit Profile", edit_user_path(current_user), class: "btn btn-primary" %>
-      </div>
+<h2>User Info</h2>
+<table class="table table-responsive">
+  <tr>
+    <td colspan="2" class="text-center">
+      <%= image_tag current_user.get_profile_image %>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>name</strong></td>
+    <td><strong><%= current_user.name %></strong></td>
+  </tr>
+  <tr>
+    <td><strong>introduction</strong></td>
+    <td><strong><%= current_user.introduction %></strong></td>
+  </tr>
+</table>
+
+<div class="row">
+  <%= link_to edit_user_path(current_user), class: "btn btn-primary" do %>
+    <i class="fa-solid fa-user-gear"></i> Edit Profile
+  <% end %>
+</div>

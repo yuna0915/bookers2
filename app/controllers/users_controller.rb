@@ -5,21 +5,34 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    @books = @user.books   
-    @book = Book.new
+    @user = User.find_by(id: params[:id])
+    if @user.nil?
+      flash[:alert] = "User not found."
+      redirect_to users_path
+    else
+      @books = @user.books
+      @book = Book.new
+    end
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = User.find_by(id: params[:id])
+    if @user.nil?
+      flash[:alert] = "User not found."
+      redirect_to users_path
+    end
   end
 
   def update
-    @user = User.find(params[:id])
-    if @user.update(user_params)
-      flash[:notice] ="You have updated user successfully."
+    @user = User.find_by(id: params[:id])
+    if @user.nil?
+      flash[:alert] = "User not found."
+      redirect_to users_path
+    elsif @user.update(user_params)
+      flash[:notice] = "You have updated user successfully."
       redirect_to user_path(@user)
     else
+      flash.now[:alert] = "Failed to update user."
       render :edit
     end
   end
