@@ -1,9 +1,9 @@
-<% if obj.errors.any? %>
+<% if book.errors.any? %>
   <div class="alert alert-danger">
-    <ul>
-      <% obj.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+      <h2><%= "#{book.errors.count} error(s) prohibited this book from being saved:" %></h2>
+        <ul>
+         <% book.errors.full_messages.each do |message| %>
+         <li><%= message %></li>            <% end %>
+        </ul>
   </div>
 <% end %>

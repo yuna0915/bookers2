@@ -3,23 +3,24 @@ class BooksController < ApplicationController
   before_action :ensure_correct_book, only: [:update, :edit, :destroy]
 
   def index
-    @book = Book.new 
+    @book = Book.new
     @books = Book.all
   end
 
   def show
     @user = @book.user
     @newbook = Book.new
+    @books = Book.where(user_id: @book.user_id) 
   end
 
   def create
-    @book = Book.new(book_params)
-    @book.user_id = current_user.id
+    @book = current_user.books.build(book_params)
+
     if @book.save
-      redirect_to @book, notice: "You have created book successfully."
+      flash[:notice] = "You have created book successfully."
+      redirect_to @book
     else
-      @books = Book.all
-      render "index"
+      render :index
     end
   end
 
@@ -27,16 +28,18 @@ class BooksController < ApplicationController
   end
 
   def update
-    if @book.update(book_params)
-      redirect_to book_path(@book), notice: "You have updated book successfully."
+    if @book.find(book_params)
+      flash[:notice] = "You have updated the book successfully."
+      redirect_to @book
     else
-      render "edit"
+      render :edit
     end
   end
 
   def destroy
     @book.destroy
-    redirect_to books_path, notice: "You have deleted the book successfully."
+    flash[:notice] = "You have deleted the book successfully."
+    redirect_to books_path
   end
 
   private

@@ -12,10 +12,25 @@
   </head>
 
   <body>
-    <%= render 'layouts/header' %>
-    <main>   
-      <%= yield %>
-    </main>                       
-      <%= render 'layouts/footer' %> 
-  </body>
+  <%= render 'layouts/header' %>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% elsif flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <main>   
+    <%= yield %>
+  </main>                       
+
+  <%= render 'layouts/footer' %> 
+</body>
+
+
+
 </html>
