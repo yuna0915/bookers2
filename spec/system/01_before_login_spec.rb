@@ -138,45 +138,20 @@ describe '[STEP1] ユーザログイン前のテスト' do
 
     context '新規登録成功のテスト' do
       before do
-        email = Faker::Internet.email
-        fill_in 'user[name]', with: Faker::Name.name[0] # 最初の1文字だけを取得する
-        fill_in 'user[email]', with: email
+        fill_in 'user[name]', with: Faker::Lorem.characters(number: 10)
+        fill_in 'user[email]', with: Faker::Internet.email
         fill_in 'user[password]', with: 'password'
         fill_in 'user[password_confirmation]', with: 'password'
       end
-    
-      it '正しく新規登録される' do
-        expect { click_button 'Sign up' }.to change(User, :count).by(1)
-      end        
+
+      it '正しく新規登録される', spec_category: "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
+        expect { click_button 'Sign up' }.to change(User.all, :count).by(1)
+      end
       it '新規登録後のリダイレクト先が、新規登録できたユーザの詳細画面になっている', spec_category: "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
-        visit new_user_path
-  
-        fill_in 'Email', with: 'test@example.com'
-        fill_in 'Password', with: 'password123'
-        fill_in 'Password confirmation', with: 'password123'
-  
         click_button 'Sign up'
-
-        # ユーザーが正しく作成されていることを確認
-         user = User.last
-         expect(user).not_to be_nil
-
-        # 新規登録したユーザーの詳細ページにリダイレクトされていることを確認
-         expect(current_path).to eq user_path(user)
+        expect(current_path).to eq '/users/' + User.last.id.to_s
       end
-      it 'ユーザ新規登録失敗' do
-        expect { click_button 'Sign up' }.not_to change(User, :count)
-      end
-      it '新規登録画面を表示しており、フォームの内容が正しい' do
-        # フォームの内容が正しいことを検証するテストを記述する
-      end
-      it 'バリデーションエラーが表示される' do
-        # バリデーションエラーが正しく表示されることを検証するテストを記述する
-      end
-      it 'ユーザのプロフィール情報編集失敗' do
-        # プロフィール情報編集時のエラーメッセージが表示されることを検証するテストを記述する
-      end
-     end
+    end
   end
 
   describe 'ユーザログイン' do
@@ -215,8 +190,8 @@ describe '[STEP1] ユーザログイン前のテスト' do
       end
 
       it 'ログイン後のリダイレクト先が、ログインしたユーザの詳細画面になっている', spec_category: "CRUD機能に対するコントローラの処理と流れ(ログイン状況を意識した応用)" do
-        expect(current_path).to eq user_path(User.last)
-      end      
+        expect(current_path).to eq '/users/' + user.id.to_s
+      end
     end
 
     context 'ログイン失敗のテスト' do

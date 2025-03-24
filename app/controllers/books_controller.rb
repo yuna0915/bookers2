@@ -3,44 +3,39 @@ class BooksController < ApplicationController
   before_action :ensure_correct_book, only: [:update, :edit, :destroy]
 
   def index
-    @book = Book.new
     @books = Book.all
+    @book = Book.new 
   end
 
   def show
     @user = @book.user
     @newbook = Book.new
-    @books = Book.where(user_id: @book.user_id) 
   end
 
   def create
-    @book = Book.new(book_params)
-    @book.user_id = current_user.id
-
+    @book = current_user.books.build(book_params) 
     if @book.save
-      flash[:notice] = "You have created book successfully."
-      redirect_to @book
+      redirect_to @book, notice: "You have created a book successfully."
     else
+      @books = Book.all
       render :index
     end
   end
 
   def edit
+    # before_actionでset_bookメソッドを実行しているため不要
   end
 
   def update
-    @book = Book.find(params[:id])  
-    if @book.update(book_params)  
-      flash[:notice] = "You have updated the book successfully."
-      redirect_to @book
+    if @book.update(book_params)
+      redirect_to @book, notice: "You have updated the book successfully."
     else
       render :edit
     end
-  end  
+  end
 
   def destroy
     @book.destroy
-    flash[:notice] = "You have deleted the book successfully."
     redirect_to books_path
   end
 
@@ -55,9 +50,8 @@ class BooksController < ApplicationController
   end
 
   def ensure_correct_book
-    if @book.user != current_user
-      flash[:alert] = "権限がありません。"
-      redirect_to books_path
+    unless @book.user == current_user
+      redirect_to books_path, alert: "You are not authorized to perform this action."
     end
   end
 end

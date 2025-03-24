@@ -1,4 +1,18 @@
-<% books.each do |book| %>
-  <p><%= book.title %></p>
-  <p><%= book.body %></p>
-<% end %>
+<table class='table'>
+  <thead>
+    <tr>
+      <th>image</th>
+      <th>name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.each do |user| %>
+      <tr>
+        <td><%= image_tag user.get_profile_image, size: '80x80' %></td>
+        <td><%= user.name %></td>
+        <td><%= link_to 'Show', user %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

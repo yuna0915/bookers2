@@ -1,27 +1,20 @@
-<h2 style="margin: 0 0 8px;">User Info</h2>
-<table class="table table-responsive">
-  <%= image_tag current_user.get_profile_image %>
+<table class='table'>
   <tr>
-    <td><strong>name</strong></td>
-    <td><strong><%= current_user.name %></strong></td>
+    <%= image_tag user.get_profile_image, size: '100x100' %>
   </tr>
   <tr>
-  <td><strong>introduction</strong></td>
-  <td>
-    <% if current_user&.introduction.present? %>
-      <strong><%= current_user.introduction %></strong>
-    <% end %>
-  </td>
-</tr>
-
+    <th>name</th>
+    <th><%= user.name %></th>
+  </tr>
+  <tr>
+    <th>introduction</th>
+    <th><%= user.introduction %></th>
+  </tr>
 </table>
 
 <div class="row">
-  <%= link_to edit_user_path(current_user),
-    class: "btn",
-    style: "background-color: white; padding: 10px 20px; display: inline-flex; align-items: center; justify-content: center; text-align: center; border: 1px solid gray; border-radius: 4px;",
-    onmouseover: "this.style.backgroundColor='#6c757d'; this.querySelector('i').style.color='white';",
-    onmouseout: "this.style.backgroundColor='white'; this.querySelector('i').style.color='#6c757d';" do %>
-    <i class="fa-solid fa-user-gear" style="color: #6c757d; font-size: 24px;"></i>
+  <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block" do %>
+    <i class="fa-solid fa-user-gear"></i> 
   <% end %>
 </div>
+

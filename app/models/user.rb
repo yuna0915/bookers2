@@ -3,17 +3,11 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
   has_many :books, dependent: :destroy
   has_one_attached :profile_image
 
-  validates :name, 
-  presence: true, 
-  length: { 
-    minimum: 2, message: "is too short (minimum is 2 characters)", 
-    maximum: 20, message: "is too long (maximum is 20 characters)" 
-  },
-  uniqueness: { message: "has already been taken" }
-
+  validates :name, length: { minimum: 2, maximum: 20 }, uniqueness: true
   validates :introduction, length: { maximum: 50 }
 
   def get_profile_image(width = 100, height = 100)
